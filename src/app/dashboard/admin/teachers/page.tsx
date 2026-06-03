@@ -1,9 +1,7 @@
 import { TeacherFormDialog } from "@/app/dashboard/admin/teachers/_components/teacher-form-dialog";
 import { TeachersTable } from "@/app/dashboard/admin/teachers/_components/teachers-table";
 import { Pagination } from "@/components/pagination";
-import {
-  DEFAULT_PER_PAGE,
-} from "@/constants/pagination";
+import { DEFAULT_PER_PAGE } from "@/constants/pagination";
 import { PageHeader } from "@/components/page-header";
 import { SearchFilterBar } from "@/components/search-filter-bar";
 import { getPerPage, getPositiveNumber } from "@/lib/pagination";
