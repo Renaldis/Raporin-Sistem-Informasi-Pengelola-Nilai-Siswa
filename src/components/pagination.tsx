@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { PerPageSelect } from "@/components/per-page-select";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -25,13 +26,15 @@ export function Pagination({
   const end = Math.min(safePage * perPage, totalItems);
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border bg-card p-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 rounded-lg border bg-card p-3 text-sm text-muted-foreground lg:flex-row lg:items-center lg:justify-between">
       <p>
         Menampilkan <span className="font-medium text-foreground">{start}</span>-
         <span className="font-medium text-foreground">{end}</span> dari{" "}
         <span className="font-medium text-foreground">{totalItems}</span> data
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <PerPageSelect value={perPage} />
+        <div className="flex items-center gap-2">
         <Button asChild disabled={safePage <= 1} size="sm" variant="outline">
           <Link
             aria-disabled={safePage <= 1}
@@ -60,6 +63,7 @@ export function Pagination({
             <ChevronRight className="h-4 w-4" />
           </Link>
         </Button>
+        </div>
       </div>
     </div>
   );

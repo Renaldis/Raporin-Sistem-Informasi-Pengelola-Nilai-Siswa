@@ -1,6 +1,10 @@
 import { StudentFormDialog } from "@/app/dashboard/admin/students/_components/student-form-dialog";
 import { StudentsTable } from "@/app/dashboard/admin/students/_components/students-table";
 import { Pagination } from "@/components/pagination";
+import {
+  DEFAULT_PER_PAGE,
+  PER_PAGE_OPTIONS,
+} from "@/constants/pagination";
 import { PageHeader } from "@/components/page-header";
 import { SearchFilterBar } from "@/components/search-filter-bar";
 import { prisma } from "@/lib/prisma";
@@ -13,7 +17,6 @@ type AdminStudentsPageProps = {
   }>;
 };
 
-const DEFAULT_PER_PAGE = 10;
 const STUDENTS_PATH = "/dashboard/admin/students";
 
 export default async function AdminStudentsPage({
@@ -22,7 +25,7 @@ export default async function AdminStudentsPage({
   const params = await searchParams;
   const search = params.search?.trim() ?? "";
   const page = getPositiveNumber(params.page, 1);
-  const perPage = getPositiveNumber(params.perPage, DEFAULT_PER_PAGE);
+  const perPage = getPerPage(params.perPage);
   const where = search
     ? {
         OR: [
@@ -100,4 +103,14 @@ function getPositiveNumber(value: string | undefined, fallback: number) {
   }
 
   return number;
+}
+
+function getPerPage(value: string | undefined) {
+  const perPage = getPositiveNumber(value, DEFAULT_PER_PAGE);
+
+  if (!PER_PAGE_OPTIONS.includes(perPage as (typeof PER_PAGE_OPTIONS)[number])) {
+    return DEFAULT_PER_PAGE;
+  }
+
+  return perPage;
 }
