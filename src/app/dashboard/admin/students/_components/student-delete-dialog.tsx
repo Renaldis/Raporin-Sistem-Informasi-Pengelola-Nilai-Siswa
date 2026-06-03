@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { type FormEvent, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -16,7 +16,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import type { ActionResult } from "@/types/action-result";
 
 type StudentDeleteDialogProps = {
   student: {
@@ -27,26 +26,33 @@ type StudentDeleteDialogProps = {
 };
 
 export function StudentDeleteDialog({ student }: StudentDeleteDialogProps) {
-  const [state, formAction, isPending] = useActionState<ActionResult | null, FormData>(
-    deleteStudentAction,
-    null
-  );
+  const [open, setOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
-  useEffect(() => {
-    if (!state) {
-      return;
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsPending(true);
+
+    try {
+      const result = await deleteStudentAction(
+        null,
+        new FormData(event.currentTarget)
+      );
+
+      if (result.success) {
+        toast.success(result.message);
+        setOpen(false);
+        return;
+      }
+
+      toast.error(result.message);
+    } finally {
+      setIsPending(false);
     }
-
-    if (state.success) {
-      toast.success(state.message);
-      return;
-    }
-
-    toast.error(state.message);
-  }, [state]);
+  }
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button size="sm" variant="destructive">
           <Trash2 className="h-4 w-4" />
@@ -63,11 +69,11 @@ export function StudentDeleteDialog({ student }: StudentDeleteDialogProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
-          <form action={formAction}>
+          <form onSubmit={handleSubmit}>
             <input name="id" type="hidden" value={student.id} />
             <Button disabled={isPending} type="submit" variant="destructive">
-                {isPending ? "Menghapus..." : "Hapus"}
-              </Button>
+              {isPending ? "Menghapus..." : "Hapus"}
+            </Button>
           </form>
         </AlertDialogFooter>
       </AlertDialogContent>
