@@ -38,7 +38,7 @@ export function DataTable<T>({
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <Table>
+      <Table className="min-w-[760px]">
         <TableHeader>
           <TableRow>
             {columns.map((column) => (
