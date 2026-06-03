@@ -3,10 +3,10 @@ import { StudentsTable } from "@/app/dashboard/admin/students/_components/studen
 import { Pagination } from "@/components/pagination";
 import {
   DEFAULT_PER_PAGE,
-  PER_PAGE_OPTIONS,
 } from "@/constants/pagination";
 import { PageHeader } from "@/components/page-header";
 import { SearchFilterBar } from "@/components/search-filter-bar";
+import { getPerPage, getPositiveNumber } from "@/lib/pagination";
 import { prisma } from "@/lib/prisma";
 
 type AdminStudentsPageProps = {
@@ -93,24 +93,4 @@ export default async function AdminStudentsPage({
       />
     </>
   );
-}
-
-function getPositiveNumber(value: string | undefined, fallback: number) {
-  const number = Number(value);
-
-  if (!Number.isInteger(number) || number < 1) {
-    return fallback;
-  }
-
-  return number;
-}
-
-function getPerPage(value: string | undefined) {
-  const perPage = getPositiveNumber(value, DEFAULT_PER_PAGE);
-
-  if (!PER_PAGE_OPTIONS.includes(perPage as (typeof PER_PAGE_OPTIONS)[number])) {
-    return DEFAULT_PER_PAGE;
-  }
-
-  return perPage;
 }
