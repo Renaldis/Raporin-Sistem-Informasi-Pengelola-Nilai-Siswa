@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { deleteTeacherAction } from "@/actions/teacher";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -66,11 +65,9 @@ export function TeacherDeleteDialog({ teacher }: TeacherDeleteDialogProps) {
           <AlertDialogCancel>Batal</AlertDialogCancel>
           <form action={formAction}>
             <input name="id" type="hidden" value={teacher.id} />
-            <AlertDialogAction asChild>
-              <Button disabled={isPending} type="submit" variant="destructive">
+            <Button disabled={isPending} type="submit" variant="destructive">
                 {isPending ? "Menghapus..." : "Hapus"}
               </Button>
-            </AlertDialogAction>
           </form>
         </AlertDialogFooter>
       </AlertDialogContent>
