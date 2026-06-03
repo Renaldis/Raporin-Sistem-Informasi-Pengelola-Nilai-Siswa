@@ -97,9 +97,14 @@ export function AcademicYearFormDialog({
               defaultValue={academicYear?.name}
               id={`${mode}-name`}
               name="name"
+              pattern="\d{4}/\d{4}"
               placeholder="2025/2026"
               required
+              title="Gunakan format tahun ajaran seperti 2025/2026"
             />
+            <p className="text-xs text-muted-foreground">
+              Format wajib: 2025/2026.
+            </p>
           </div>
           {state?.message && !state.success ? (
             <p className="text-sm text-destructive">{state.message}</p>
