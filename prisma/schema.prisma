@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum GraduationStatus {
+  PASSED
+  FAILED
+}
+
+model User {
+  id String @id @default(cuid())
+
+  username String @unique
+  password String
+
+  role Role
+
+  student Student?
+  teacher Teacher?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Student {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  nis  String @unique
+  name String
+
+  enrollments StudentClassEnrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teacher {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  teacherCode String @unique
+  name        String
+
+  teacherSubjects TeacherSubject[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ClassRoom {
+  id String @id @default(cuid())
+
+  name  String @unique
+  level String
+
+  enrollments StudentClassEnrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subject {
+  id String @id @default(cuid())
+
+  code String @unique
+  name String
+
+  teacherSubjects TeacherSubject[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AcademicYear {
+  id String @id @default(cuid())
+
+  name     String  @unique
+  isActive Boolean @default(false)
+
+  enrollments StudentClassEnrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeacherSubject {
+  id String @id @default(cuid())
+
+  teacherId String
+  subjectId String
+
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+
+  scores Score[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([teacherId, subjectId])
+}
+
+model StudentClassEnrollment {
+  id String @id @default(cuid())
+
+  studentId      String
+  classRoomId    String
+  academicYearId String
+
+  student      Student      @relation(fields: [studentId], references: [id])
+  classRoom    ClassRoom    @relation(fields: [classRoomId], references: [id])
+  academicYear AcademicYear @relation(fields: [academicYearId], references: [id])
+
+  scores Score[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, academicYearId])
+}
+
+model Score {
+  id String @id @default(cuid())
+
+  enrollmentId     String
+  teacherSubjectId String
+
+  taskScore Int
+  utsScore  Int
+  uasScore  Int
+
+  finalScore Float
+  status     GraduationStatus
+
+  enrollment     StudentClassEnrollment @relation(fields: [enrollmentId], references: [id])
+  teacherSubject TeacherSubject         @relation(fields: [teacherSubjectId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([enrollmentId, teacherSubjectId])
+}

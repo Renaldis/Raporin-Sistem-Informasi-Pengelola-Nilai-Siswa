@@ -1,0 +1,17 @@
+PRD.md
+PRD.Md
+task-implementation.md
+Tugas-1.md
+
+node_modules
+.next
+out
+
+.env
+.env*.local
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
