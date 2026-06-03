@@ -8,6 +8,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/permissions";
 
+export const dynamic = "force-dynamic";
+
 export default async function TeacherDashboardPage() {
   const user = await requireRole("TEACHER");
   const teacher = await prisma.teacher.findUnique({

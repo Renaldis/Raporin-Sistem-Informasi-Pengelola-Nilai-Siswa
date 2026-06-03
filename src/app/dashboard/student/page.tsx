@@ -10,6 +10,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/permissions";
 
+export const dynamic = "force-dynamic";
+
 export default async function StudentDashboardPage() {
   const user = await requireRole("STUDENT");
   const activeAcademicYear = await prisma.academicYear.findFirst({

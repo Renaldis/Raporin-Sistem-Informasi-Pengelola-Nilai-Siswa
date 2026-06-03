@@ -8,6 +8,8 @@ import { SearchFilterBar } from "@/components/search-filter-bar";
 import { getPerPage, getPositiveNumber } from "@/lib/pagination";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 type AdminAcademicYearsPageProps = {
   searchParams: Promise<{
     search?: string;
